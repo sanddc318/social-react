@@ -43,6 +43,7 @@ class EditProfile extends Component {
     this.state = {
       name: '',
       email: '',
+      about: '',
       password: '',
       redirectToProfile: false,
       error: ''
@@ -59,7 +60,11 @@ class EditProfile extends Component {
         if (data.error) {
           this.setState({ error: data.error })
         } else {
-          this.setState({ name: data.name, email: data.email })
+          this.setState({
+            name: data.name,
+            email: data.email,
+            about: data.about
+          })
         }
       }
     )
@@ -73,7 +78,8 @@ class EditProfile extends Component {
     const user = {
       name: this.state.name || undefined,
       email: this.state.email || undefined,
-      password: this.state.password || undefined
+      password: this.state.password || undefined,
+      about: this.state.about || undefined
     }
 
     update({ userId: this.match.params.userId }, { t: jwt.token }, user).then(
@@ -128,6 +134,18 @@ class EditProfile extends Component {
             className={classes.textField}
             value={this.state.password}
             onChange={this.handleChange('password')}
+            margin="normal"
+          />
+          <br />
+
+          <TextField
+            id="multiline-flexible"
+            label="About You"
+            multiline
+            className={classes.textField}
+            placeholder="Please give a brief description of yourself."
+            value={this.state.about}
+            onChange={this.handleChange('about')}
             margin="normal"
           />
           <br />

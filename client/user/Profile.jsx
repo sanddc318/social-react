@@ -112,6 +112,7 @@ class Profile extends Component {
               primary={
                 `Joined: ${new Date(this.state.user.created).toDateString()}`
               }
+              secondary={this.state.user.about}
             />
           </ListItem>
         </List>
