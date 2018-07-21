@@ -32,6 +32,10 @@ router.route('/api/users/unfollow')
   )
 
 // prettier-ignore
+router.route('/api/users/findpeople/:userId')
+  .get(authCtrl.requireSignin, userCtrl.findPeople)
+
+// prettier-ignore
 router.route('/api/users/:userId')
   .get(authCtrl.requireSignin, userCtrl.read)
   .put(

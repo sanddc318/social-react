@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardContent, CardMedia } from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
+import FindPeople from '../user/FindPeople.jsx'
 import beachPhoto from '../assets/images/beach-view.jpeg'
+import auth from '../auth/auth-helper'
 
 const styles = (theme) => ({
   card: {
@@ -22,6 +24,26 @@ const styles = (theme) => ({
 })
 
 class Home extends Component {
+  state = {
+    defaultPage: true
+  }
+
+  init = () => {
+    if (auth.isAuthenticated()) {
+      this.setState({ defaultPage: false })
+    } else {
+      this.setState({ defaultPage: true })
+    }
+  }
+
+  componentWillReceiveProps() {
+    this.init()
+  }
+
+  componentDidMount() {
+    this.init()
+  }
+
   render() {
     const { classes } = this.props
 
@@ -44,6 +66,8 @@ class Home extends Component {
             </Typography>
           </CardContent>
         </Card>
+
+        {!this.state.defaultPage && <FindPeople />}
       </React.Fragment>
     )
   }
