@@ -148,7 +148,7 @@ const addFollower = (req, res) => {
     })
 }
 
-const removeFollowing = (req, res) => {
+const removeFollowing = (req, res, next) => {
   User.findByIdAndUpdate(
     req.body.userId,
     { $pull: { following: req.body.otherUserId } },

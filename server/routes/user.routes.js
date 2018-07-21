@@ -10,20 +10,6 @@ router.route('/api/users')
   .get(userCtrl.list)
 
 // prettier-ignore
-router.route('/api/users/:userId')
-  .get(authCtrl.requireSignin, userCtrl.read)
-  .put(
-    authCtrl.requireSignin,
-    authCtrl.hasAuthorization,
-    userCtrl.update
-  )
-  .delete(
-    authCtrl.requireSignin,
-    authCtrl.hasAuthorization,
-    userCtrl.remove
-  )
-
-// prettier-ignore
 router.route('/api/users/photo/:userId')
   .get(userCtrl.photo, userCtrl.defaultPhoto)
 // prettier-ignore
@@ -40,9 +26,23 @@ router.route('/api/users/follow')
 // prettier-ignore
 router.route('/api/users/unfollow')
   .put(
-    auth.authCtrl.requireSignin,
+    authCtrl.requireSignin,
     userCtrl.removeFollowing,
     userCtrl.removeFollower
+  )
+
+// prettier-ignore
+router.route('/api/users/:userId')
+  .get(authCtrl.requireSignin, userCtrl.read)
+  .put(
+    authCtrl.requireSignin,
+    authCtrl.hasAuthorization,
+    userCtrl.update
+  )
+  .delete(
+    authCtrl.requireSignin,
+    authCtrl.hasAuthorization,
+    userCtrl.remove
   )
 
 router.param('userId', userCtrl.userById)

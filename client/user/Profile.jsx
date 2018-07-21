@@ -18,6 +18,7 @@ import Divider from 'material-ui/Divider'
 import auth from '../auth/auth-helper'
 import { read } from './api-user'
 import DeleteUser from './DeleteUser.jsx'
+import FollowProfileButton from './FollowProfileButton.jsx'
 
 const styles = (theme) => ({
   root: theme.mixins.gutters({
@@ -37,8 +38,10 @@ class Profile extends Component {
     super()
 
     this.state = {
-      user: '',
-      redirectToSignin: false
+      user: { following: [], followers: [] },
+      redirectToSignin: false,
+      following: false,
+      error: ''
     }
 
     this.match = match
@@ -51,7 +54,8 @@ class Profile extends Component {
       if (data.error) {
         this.setState({ redirectToSignin: true })
       } else {
-        this.setState({ user: data })
+        let following = this.checkIfFollowing(data)
+        this.setState({ user: data, following: following })
       }
     })
   }
@@ -62,6 +66,31 @@ class Profile extends Component {
 
   componentDidMount() {
     this.init(this.match.params.userId)
+  }
+
+  checkIfFollowing = (user) => {
+    const jwt = auth.isAuthenticated()
+    const match = user.followers.find((follower) => {
+      return follower._id == jwt.user._id
+    })
+
+    return match || false
+  }
+
+  handleFollowButtonClick = (callApi) => {
+    const jwt = auth.isAuthenticated()
+
+    callApi(
+      { userId: jwt.user._id },
+      { t: jwt.token },
+      this.state.user._id
+    ).then((data) => {
+      if (data.error) {
+        this.setState({ error: data.error })
+      } else {
+        this.setState({ user: data, following: !this.state.following })
+      }
+    })
   }
 
   render() {
@@ -91,17 +120,22 @@ class Profile extends Component {
             />
 
             {auth.isAuthenticated().user &&
-              auth.isAuthenticated().user._id == this.state.user._id && (
-                <ListItemSecondaryAction>
-                  <Link to={`/user/edit/${this.state.user._id}`}>
-                    <IconButton aria-label="Edit" color="primary">
-                      <Edit />
-                    </IconButton>
-                  </Link>
+            auth.isAuthenticated().user._id == this.state.user._id ? (
+              <ListItemSecondaryAction>
+                <Link to={`/user/edit/${this.state.user._id}`}>
+                  <IconButton aria-label="Edit" color="primary">
+                    <Edit />
+                  </IconButton>
+                </Link>
 
-                  <DeleteUser userId={this.state.user._id} />
-                </ListItemSecondaryAction>
-              )}
+                <DeleteUser userId={this.state.user._id} />
+              </ListItemSecondaryAction>
+            ) : (
+              <FollowProfileButton
+                following={this.state.following}
+                onButtonClick={this.handleFollowButtonClick}
+              />
+            )}
           </ListItem>
 
           <Divider />
