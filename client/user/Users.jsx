@@ -11,10 +11,10 @@ import List, {
   ListItemText
 } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
-import Person from 'material-ui-icons/Person'
 import IconButton from 'material-ui/IconButton'
 import ArrowForward from 'material-ui-icons/ArrowForward'
 import { list } from './api-user'
+import profileImage from '../assets/images/avatar-placeholder.png'
 
 const styles = (theme) => ({
   root: theme.mixins.gutters({
@@ -43,7 +43,6 @@ class Users extends Component {
   render() {
     const { classes } = this.props
 
-    // prettier-ignore
     return (
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
@@ -51,25 +50,29 @@ class Users extends Component {
         </Typography>
 
         <List dense>
-          {this.state.users.map((user, index) => (
-            <Link to={`/user/${user._id}`} key={index}>
-              <ListItem button>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Person />
-                  </Avatar>
-                </ListItemAvatar>
+          {this.state.users.map((user, index) => {
+            const photoUrl = user.photo
+              ? `/api/users/photo/${user._id}?${new Date().getTime()}`
+              : profileImage
 
-                <ListItemText primary={user.name} />
+            return (
+              <Link to={`/user/${user._id}`} key={index}>
+                <ListItem button>
+                  <ListItemAvatar>
+                    <Avatar src={photoUrl} />
+                  </ListItemAvatar>
 
-                <ListItemSecondaryAction>
-                  <IconButton>
-                    <ArrowForward />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </Link>
-          ))}
+                  <ListItemText primary={user.name} />
+
+                  <ListItemSecondaryAction>
+                    <IconButton>
+                      <ArrowForward />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </Link>
+            )
+          })}
         </List>
       </Paper>
     )

@@ -15,6 +15,13 @@ router.route('/api/users/:userId')
   .put(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.update)
   .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.remove)
 
+// prettier-ignore
+router.route('/api/users/photo/:userId')
+  .get(userCtrl.photo, userCtrl.defaultPhoto)
+// prettier-ignore
+router.route('/api/users/defaultphoto')
+  .get(userCtrl.defaultPhoto)
+
 router.param('userId', userCtrl.userById)
 
 export default router

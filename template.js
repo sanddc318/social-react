@@ -6,6 +6,11 @@ export default ({ markup, css }) => {
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400">
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <title>User Signup Client</title>
+      <style>
+        a {
+          text-decoration: none;
+        }
+      </style>
     </head>
     <body>
       <div id="root">${markup}</div>

@@ -7,6 +7,8 @@ import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
 import Typography from 'material-ui/Typography'
 import Icon from 'material-ui/Icon'
+import FileUpload from 'material-ui-icons/FileUpload'
+import Avatar from 'material-ui/Avatar'
 import auth from '../auth/auth-helper'
 import { read, update } from './api-user.js'
 
@@ -33,6 +35,14 @@ const styles = (theme) => ({
   submit: {
     margin: '0 auto',
     marginBottom: theme.spacing.unit * 2
+  },
+  filename: {
+    marginLeft: '10px'
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60,
+    margin: '0 auto'
   }
 })
 
@@ -41,10 +51,11 @@ class EditProfile extends Component {
     super()
 
     this.state = {
+      photo: '',
       name: '',
       email: '',
-      about: '',
       password: '',
+      about: '',
       redirectToProfile: false,
       error: ''
     }
@@ -53,6 +64,7 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
+    this.userData = new FormData()
     const jwt = auth.isAuthenticated()
 
     read({ userId: this.match.params.userId }, { t: jwt.token }).then(
@@ -61,6 +73,7 @@ class EditProfile extends Component {
           this.setState({ error: data.error })
         } else {
           this.setState({
+            id: data._id,
             name: data.name,
             email: data.email,
             about: data.about
@@ -70,31 +83,40 @@ class EditProfile extends Component {
     )
   }
 
-  handleChange = (name) => (event) =>
-    this.setState({ [name]: event.target.value })
+  handleChange = (name) => (event) => {
+    const value = name === 'photo' ? event.target.files[0] : event.target.value
+
+    this.userData.set(name, value)
+    this.setState({ [name]: value })
+  }
 
   handleSubmit = () => {
     const jwt = auth.isAuthenticated()
-    const user = {
-      name: this.state.name || undefined,
-      email: this.state.email || undefined,
-      password: this.state.password || undefined,
-      about: this.state.about || undefined
-    }
+    // const user = {
+    //   name: this.state.name || undefined,
+    //   email: this.state.email || undefined,
+    //   password: this.state.password || undefined,
+    //   about: this.state.about || undefined
+    // }
 
-    update({ userId: this.match.params.userId }, { t: jwt.token }, user).then(
-      (data) => {
-        if (data.error) {
-          this.setState({ error: data.error })
-        } else {
-          this.setState({ userId: data._id, redirectToProfile: true })
-        }
+    update(
+      { userId: this.match.params.userId },
+      { t: jwt.token },
+      this.userData
+    ).then((data) => {
+      if (data.error) {
+        this.setState({ error: data.error })
+      } else {
+        this.setState({ redirectToProfile: true })
       }
-    )
+    })
   }
 
   render() {
     const { classes } = this.props
+    const photoUrl = this.state.id
+      ? `/api/users/photo/${this.state.id}?${new Date().getTime()}` // Bypass browser cache.
+      : `/api/users/defaultphoto`
 
     if (this.state.redirectToProfile)
       return <Redirect to={`/user/${this.state.userId}`} />
@@ -106,6 +128,25 @@ class EditProfile extends Component {
             Edit Profile
           </Typography>
 
+          <Avatar src={photoUrl} className={classes.bigAvatar} />
+          <br />
+          <input
+            type="file"
+            accept="image/*"
+            id="icon-button-file"
+            style={{ display: 'none' }}
+            onChange={this.handleChange('photo')}
+          />
+          <label htmlFor="icon-button-file">
+            <Button variant="raised" color="default" component="span">
+              Upload <FileUpload />
+            </Button>
+          </label>
+          <span className={classes.filename}>
+            {this.state.photo ? this.state.photo.name : ''}
+          </span>
+          <br />
+
           <TextField
             id="name"
             label="Name"
@@ -115,7 +156,6 @@ class EditProfile extends Component {
             margin="normal"
           />
           <br />
-
           <TextField
             id="email"
             type="email"
@@ -126,7 +166,6 @@ class EditProfile extends Component {
             margin="normal"
           />
           <br />
-
           <TextField
             id="password"
             type="password"
@@ -137,7 +176,6 @@ class EditProfile extends Component {
             margin="normal"
           />
           <br />
-
           <TextField
             id="multiline-flexible"
             label="About You"
@@ -149,7 +187,6 @@ class EditProfile extends Component {
             margin="normal"
           />
           <br />
-
           {this.state.error && (
             <Typography component="p" color="error">
               <Icon color="error" className={classes.error}>

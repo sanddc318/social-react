@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  photo: {
+    data: Buffer,
+    contentType: String
+  },
   created: { type: Date, default: Date.now() },
   updated: Date,
   hashed_password: { type: String, required: 'Password is required' },

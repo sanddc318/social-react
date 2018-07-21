@@ -1,6 +1,9 @@
 import _ from 'lodash'
+import formidable from 'formidable'
+import fs from 'fs'
 import User from '../models/user.model'
 import errorHandler from '../helpers/dbErrorHandler'
+import profileImage from '../../client/assets/images/avatar-placeholder.png'
 
 const create = (req, res, next) => {
   const user = new User(req.body)
@@ -25,7 +28,7 @@ const list = (req, res) => {
       })
 
     res.json(users)
-  }).select('name email updated created')
+  }).select('name email updated created photo')
 }
 
 const userById = (req, res, next, id) => {
@@ -48,19 +51,34 @@ const read = (req, res) => {
 }
 
 const update = (req, res, next) => {
-  let user = req.profile
-  user = _.extend(user, req.body)
-  user.updated = Date.now()
+  let form = new formidable.IncomingForm()
+  form.keepExtensions = true
 
-  user.save((err) => {
+  form.parse(req, (err, fields, files) => {
     if (err)
       return res.status(400).json({
-        error: errorHandler.getErrorMessage(err)
+        error: 'Photo could not be uploaded.'
       })
 
-    user.hashed_password = undefined
-    user.salt = undefined
-    res.json(user)
+    let user = req.profile
+    user = _.extend(user, fields)
+    user.updated = Date.now()
+
+    if (files.photo) {
+      user.photo.data = fs.readFileSync(files.photo.path)
+      user.photo.contentType = files.photo.type
+    }
+
+    user.save((err) => {
+      if (err)
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+
+      user.hashed_password = undefined
+      user.salt = undefined
+      res.json(user)
+    })
   })
 }
 
@@ -79,4 +97,26 @@ const remove = (req, res, next) => {
   })
 }
 
-export default { create, list, userById, read, update, remove }
+const photo = (req, res, next) => {
+  if (req.profile.photo.data) {
+    res.set('Content-Type', req.profile.photo.contentType)
+    return res.send(req.profile.photo.data)
+  }
+
+  next()
+}
+
+const defaultPhoto = (req, res) => {
+  return res.sendFile(process.cwd() + profileImage)
+}
+
+export default {
+  create,
+  list,
+  userById,
+  read,
+  update,
+  remove,
+  photo,
+  defaultPhoto
+}

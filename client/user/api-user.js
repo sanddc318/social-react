@@ -38,10 +38,9 @@ const update = (params, credentials, user) => {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${credentials.t}`
     },
-    body: JSON.stringify(user)
+    body: user
   })
     .then((response) => response.json())
     .catch((err) => console.log(err))

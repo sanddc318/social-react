@@ -28,7 +28,7 @@ const styles = (theme) => ({
     marginTop: theme.spacing.unit * 5
   }),
   title: {
-    margin: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 2}px`,
+    margin: `0 0 ${theme.spacing.unit * 2}px`,
     color: theme.palette.protectedTitle
   }
 })
@@ -57,17 +57,20 @@ class Profile extends Component {
     })
   }
 
-  componentDidMount() {
-    this.init(this.match.params.userId)
-  }
-
   componentWillReceiveProps(props) {
     this.init(props.match.params.userId)
+  }
+
+  componentDidMount() {
+    this.init(this.match.params.userId)
   }
 
   render() {
     const { classes } = this.props
     const redirectToSignin = this.state.redirectToSignin
+    const photoUrl = this.state.user._id
+      ? `/api/users/photo/${this.state.user._id}?${new Date().getTime()}`
+      : '/api/users/defaultphoto'
 
     if (redirectToSignin) return <Redirect to="/signin" />
 
@@ -80,9 +83,7 @@ class Profile extends Component {
         <List dense>
           <ListItem>
             <ListItemAvatar>
-              <Avatar>
-                <Person />
-              </Avatar>
+              <Avatar src={photoUrl} />
             </ListItemAvatar>
 
             <ListItemText
@@ -105,16 +106,16 @@ class Profile extends Component {
           </ListItem>
 
           <Divider />
-
           <ListItem>
             {/* prettier-ignore */}
             <ListItemText
-              primary={
+              primary={this.state.user.about}
+              secondary={
                 `Joined: ${new Date(this.state.user.created).toDateString()}`
               }
-              secondary={this.state.user.about}
             />
           </ListItem>
+          <Divider />
         </List>
       </Paper>
     )
