@@ -18,7 +18,7 @@ const Menu = withRouter(({ history }) => (
   <AppBar position="static">
     <Toolbar>
       <Typography type="title" color="inherit">
-        MERN Skeleton
+        React Social
       </Typography>
 
       <Link to="/">
@@ -36,6 +36,7 @@ const Menu = withRouter(({ history }) => (
           <Link to="/signup">
             <Button style={isActive(history, '/signup')}>Sign up</Button>
           </Link>
+
           <Link to="/signin">
             <Button style={isActive(history, '/signin')}>Sign In</Button>
           </Link>
