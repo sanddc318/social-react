@@ -113,11 +113,6 @@ class EditProfile extends Component {
       : `/api/users/defaultphoto`
 
     if (this.state.redirectToProfile)
-      // HAD TO LEAVE A COMMENT FOR THIS RETURN STATEMENT
-      // HOURS UPON HOURS WASTED!
-      // AAAAAHHHHH! SO DAMN MAD!
-      // NEVER AGAIN. IT'S ALWAYS A TYPO!!!
-      // WILL DELETE NEXT COMMIT ... MAYBE
       return <Redirect to={`/user/${this.state.id}`} />
 
     return (

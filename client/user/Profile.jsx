@@ -11,7 +11,6 @@ import List, {
 } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
 import IconButton from 'material-ui/IconButton'
-import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 import Edit from 'material-ui-icons/Edit'
 import Divider from 'material-ui/Divider'
@@ -19,6 +18,7 @@ import auth from '../auth/auth-helper'
 import { read } from './api-user'
 import DeleteUser from './DeleteUser.jsx'
 import FollowProfileButton from './FollowProfileButton.jsx'
+import FollowGrid from './FollowGrid.jsx'
 
 const styles = (theme) => ({
   root: theme.mixins.gutters({
@@ -103,6 +103,7 @@ class Profile extends Component {
     if (redirectToSignin) return <Redirect to="/signin" />
 
     return (
+      // prettier-ignore
       <Paper className={classes.root} elevation={4}>
         <Typography type="title" className={classes.title}>
           Profile
@@ -153,6 +154,11 @@ class Profile extends Component {
           </ListItem>
 
           <Divider />
+
+          Followers
+          <FollowGrid people={this.state.user.followers} />
+          Following
+          <FollowGrid people={this.state.user.following} />
         </List>
       </Paper>
     )
