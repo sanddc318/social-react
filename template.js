@@ -5,7 +5,7 @@ export default ({ markup, css }) => {
       <meta charset="utf-8">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400">
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-      <title>User Signup Client</title>
+      <title>React Social</title>
       <style>
         a {
           text-decoration: none;

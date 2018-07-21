@@ -12,11 +12,7 @@ const create = (user) => {
 }
 
 const list = () => {
-  return fetch('/api/users/', {
-    headers: {
-      Accept: 'application/json'
-    }
-  })
+  return fetch('/api/users/')
     .then((response) => response.json())
     .catch((err) => console.log(err))
 }

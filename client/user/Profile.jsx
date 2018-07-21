@@ -14,10 +14,9 @@ import IconButton from 'material-ui/IconButton'
 import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 import Edit from 'material-ui-icons/Edit'
-import Person from 'material-ui-icons/Person'
 import Divider from 'material-ui/Divider'
 import auth from '../auth/auth-helper'
-import { read } from './api-user.js'
+import { read } from './api-user'
 import DeleteUser from './DeleteUser.jsx'
 
 const styles = (theme) => ({
@@ -106,15 +105,19 @@ class Profile extends Component {
           </ListItem>
 
           <Divider />
+
+          <ListItem>
+            <ListItemText primary={this.state.user.about} />
+          </ListItem>
           <ListItem>
             {/* prettier-ignore */}
             <ListItemText
-              primary={this.state.user.about}
               secondary={
                 `Joined: ${new Date(this.state.user.created).toDateString()}`
               }
             />
           </ListItem>
+
           <Divider />
         </List>
       </Paper>

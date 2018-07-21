@@ -92,12 +92,6 @@ class EditProfile extends Component {
 
   handleSubmit = () => {
     const jwt = auth.isAuthenticated()
-    // const user = {
-    //   name: this.state.name || undefined,
-    //   email: this.state.email || undefined,
-    //   password: this.state.password || undefined,
-    //   about: this.state.about || undefined
-    // }
 
     update(
       { userId: this.match.params.userId },
@@ -119,7 +113,12 @@ class EditProfile extends Component {
       : `/api/users/defaultphoto`
 
     if (this.state.redirectToProfile)
-      return <Redirect to={`/user/${this.state.userId}`} />
+      // HAD TO LEAVE A COMMENT FOR THIS RETURN STATEMENT
+      // HOURS UPON HOURS WASTED!
+      // AAAAAHHHHH! SO DAMN MAD!
+      // NEVER AGAIN. IT'S ALWAYS A TYPO!!!
+      // WILL DELETE NEXT COMMIT ... MAYBE
+      return <Redirect to={`/user/${this.state.id}`} />
 
     return (
       <Card className={classes.card}>
