@@ -6,6 +6,10 @@ import userCtrl from '../controllers/user.controller'
 const router = express.Router()
 
 // prettier-ignore
+router.route('/api/posts/new/:userId')
+  .post(authCtrl.requireSignin, postCtrl.create)
+
+// prettier-ignore
 router.route('/api/posts/feed/:userId')
   .get(authCtrl.requireSignin, postCtrl.listNewsfeed)
 
@@ -13,6 +17,11 @@ router.route('/api/posts/feed/:userId')
 router.route('/api/posts/by/:userId')
   .get(authCtrl.requireSignin, postCtrl.listByUser)
 
+// prettier-ignore
+router.route('/api/posts/photo/:postId')
+  .get(postCtrl.photo)
+
 router.param('userId', userCtrl.userById)
+router.param('postId', postCtrl.postById)
 
 export default router

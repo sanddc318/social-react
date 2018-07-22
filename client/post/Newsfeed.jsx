@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import auth from './../auth/auth-helper'
 import { listNewsfeed } from './api-post.js'
-// import NewPost from './NewPost.jsx'
+import NewPost from './NewPost.jsx'
 import PostList from './PostList.jsx'
 
 const styles = (theme) => ({
@@ -73,7 +73,7 @@ class Newsfeed extends Component {
 
         <Divider />
 
-        {/*<NewPost onAddPost={this.handleAddPost} />*/}
+        <NewPost onAddPost={this.handleAddPost} />
 
         <Divider />
 

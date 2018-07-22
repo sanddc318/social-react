@@ -1,3 +1,16 @@
+const create = (params, credentials, post) => {
+  return fetch(`/api/posts/new/${params.userId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${credentials.t}`
+    },
+    body: post
+  })
+    .then((response) => response.json())
+    .catch((err) => console.log(err))
+}
+
 const listNewsfeed = (params, credentials) => {
   return fetch(`/api/posts/feed/${params.userId}`, {
     headers: {
@@ -22,4 +35,4 @@ const listByUser = (params, credentials) => {
     .catch((err) => console.log(err))
 }
 
-export { listNewsfeed, listByUser }
+export { create, listNewsfeed, listByUser }
