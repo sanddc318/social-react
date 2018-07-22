@@ -3,41 +3,6 @@ import fs from 'fs'
 import Post from '../models/post.model'
 import errorHandler from '../helpers/dbErrorHandler'
 
-const listNewsfeed = (req, res) => {
-  let following = req.profile.following
-  following.push(req.profile._id)
-
-  Post.find({ postedBy: { $in: req.profile.following } })
-    .populate('comments', 'text created')
-    .populate('comments.postedBy', '_id name')
-    .populate('postedBy', '_id name')
-    .sort('-created')
-    .exec((err, posts) => {
-      if (err)
-        return res.status(400).json({
-          error: errorHandler.getErrorMessage(err)
-        })
-
-      res.json(posts)
-    })
-}
-
-const listByUser = (req, res) => {
-  Post.find({ postedBy: req.profile._id })
-    .populate('comments', 'text created')
-    .populate('comments.postedBy', '_id name')
-    .populate('postedBy', '_id name')
-    .sort('-created')
-    .exec((err, posts) => {
-      if (err)
-        return res.status(400).json({
-          error: errorHandler.getErrorMessage(err)
-        })
-
-      res.json(posts)
-    })
-}
-
 const create = (req, res, next) => {
   let form = new formidable.IncomingForm()
   form.keepExtensions = true
@@ -81,9 +46,78 @@ const postById = (req, res, next, id) => {
     })
 }
 
+const isPoster = (req, res, next) => {
+  // console.log('post', typeof req.post.postedBy._id)
+  // console.log('auth', typeof req.auth._id)
+  let isPoster = req.post && req.auth && req.post.postedBy._id == req.auth._id
+
+  if (!isPoster)
+    return res.status(403).json({
+      error: 'User is not authorized'
+    })
+
+  next()
+}
+
+const remove = (req, res, next) => {
+  let post = req.post
+
+  post.remove((err, deletedPost) => {
+    if (err)
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+
+    res.json(deletedPost)
+  })
+}
+
+const listNewsfeed = (req, res) => {
+  let following = req.profile.following
+  following.push(req.profile._id)
+
+  Post.find({ postedBy: { $in: req.profile.following } })
+    .populate('comments', 'text created')
+    .populate('comments.postedBy', '_id name')
+    .populate('postedBy', '_id name')
+    .sort('-created')
+    .exec((err, posts) => {
+      if (err)
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+
+      res.json(posts)
+    })
+}
+
+const listByUser = (req, res) => {
+  Post.find({ postedBy: req.profile._id })
+    .populate('comments', 'text created')
+    .populate('comments.postedBy', '_id name')
+    .populate('postedBy', '_id name')
+    .sort('-created')
+    .exec((err, posts) => {
+      if (err)
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+
+      res.json(posts)
+    })
+}
+
 const photo = (req, res, next) => {
   res.set('Content-Type', req.post.photo.contentType)
   return res.send(req.post.photo.data)
 }
 
-export default { listNewsfeed, listByUser, create, postById, photo }
+export default {
+  create,
+  postById,
+  isPoster,
+  remove,
+  listNewsfeed,
+  listByUser,
+  photo
+}

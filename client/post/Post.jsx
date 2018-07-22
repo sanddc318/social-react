@@ -51,6 +51,18 @@ class Post extends Component {
     comments: []
   }
 
+  deletePost = () => {
+    const jwt = auth.isAuthenticated()
+
+    remove({ postId: this.props.post._id }, { t: jwt.token }).then((data) => {
+      if (data.error) {
+        console.log(data.error)
+      } else {
+        this.props.onRemovePost(this.props.post)
+      }
+    })
+  }
+
   render() {
     const { classes } = this.props
     const { postedBy, created, _id, photo, text } = this.props.post

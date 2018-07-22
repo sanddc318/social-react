@@ -21,6 +21,14 @@ router.route('/api/posts/by/:userId')
 router.route('/api/posts/photo/:postId')
   .get(postCtrl.photo)
 
+// prettier-ignore
+router.route('/api/posts/:postId')
+  .delete(
+    authCtrl.requireSignin,
+    postCtrl.isPoster,
+    postCtrl.remove
+  )
+
 router.param('userId', userCtrl.userById)
 router.param('postId', postCtrl.postById)
 
