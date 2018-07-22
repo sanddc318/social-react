@@ -121,7 +121,7 @@ class FindPeople extends Component {
 
                       <Button
                         aria-label="Follow"
-                        varant="raised"
+                        variant="raised"
                         color="primary"
                         onClick={this.handleFollowClick.bind(
                           this,
