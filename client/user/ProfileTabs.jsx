@@ -43,6 +43,7 @@ class ProfileTabs extends Component {
             <PostList
               onRemovePost={this.props.onRemovePost}
               posts={this.props.posts}
+              user={this.props.user}
             />
           </TabContainer>
         )}
