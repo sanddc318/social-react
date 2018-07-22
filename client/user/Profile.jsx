@@ -30,8 +30,14 @@ const styles = (theme) => ({
     marginTop: theme.spacing.unit * 5
   }),
   title: {
-    margin: `0 0 ${theme.spacing.unit * 2}px`,
-    color: theme.palette.protectedTitle
+    margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit}px 0`,
+    color: theme.palette.protectedTitle,
+    fontSize: '1em'
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60,
+    margin: 10
   }
 })
 
@@ -126,7 +132,7 @@ class Profile extends Component {
 
         <List dense>
           <ListItem>
-            <ListItemAvatar>
+            <ListItemAvatar className={classes.bigAvatar}>
               <Avatar src={photoUrl} />
             </ListItemAvatar>
 

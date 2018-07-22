@@ -63,9 +63,13 @@ class Newsfeed extends Component {
   }
 
   render() {
+    const { classes } = this.props
+
     return (
       <Card>
-        <Typography type="title">Newsfeed</Typography>
+        <Typography type="title" className={classes.title}>
+          Newsfeed
+        </Typography>
 
         <Divider />
 

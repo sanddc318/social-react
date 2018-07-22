@@ -44,21 +44,23 @@ class FollowGrid extends Component {
     return (
       <div className={classes.root}>
         <GridList cellHeight={160} className={classes.gridList} cols={4}>
-          {this.props.people.map((person, index) => {
-            return (
-              <GridListTile style={{ height: 120 }} key={index}>
-                <Link to={`/user/${person._id}`}>
-                  <Avatar
-                    src={`/api/users/photo/${person._id}`}
-                    className={classes.bigAvatar}
-                  />
-                  <Typography className={classes.tileText}>
-                    {person.name}
-                  </Typography>
-                </Link>
-              </GridListTile>
-            )
-          })}
+          {this.props.people
+            .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase())
+            .map((person, index) => {
+              return (
+                <GridListTile style={{ height: 120 }} key={index}>
+                  <Link to={`/user/${person._id}`}>
+                    <Avatar
+                      src={`/api/users/photo/${person._id}`}
+                      className={classes.bigAvatar}
+                    />
+                    <Typography className={classes.tileText}>
+                      {person.name}
+                    </Typography>
+                  </Link>
+                </GridListTile>
+              )
+            })}
         </GridList>
       </div>
     )

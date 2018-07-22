@@ -99,42 +99,44 @@ class FindPeople extends Component {
           </Typography>
 
           <List>
-            {this.state.users.map((user, index) => {
-              return (
-                <span key={index}>
-                  <ListItem>
-                    <ListItemAvatar className={classes.avatar}>
-                      <Avatar src={`/api/users/photo/${user._id}`} />
-                    </ListItemAvatar>
+            {this.state.users
+              .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase())
+              .map((user, index) => {
+                return (
+                  <span key={index}>
+                    <ListItem>
+                      <ListItemAvatar className={classes.avatar}>
+                        <Avatar src={`/api/users/photo/${user._id}`} />
+                      </ListItemAvatar>
 
-                    <ListItemText primary={user.name} />
+                      <ListItemText primary={user.name} />
 
-                    <ListItemSecondaryAction className={classes.follow}>
-                      <Link to={`/user/${user._id}`}>
-                        <IconButton
+                      <ListItemSecondaryAction className={classes.follow}>
+                        <Link to={`/user/${user._id}`}>
+                          <IconButton
+                            variant="raised"
+                            color="secondary"
+                            className={classes.viewButton}>
+                            <ViewIcon />
+                          </IconButton>
+                        </Link>
+
+                        <Button
+                          aria-label="Follow"
                           variant="raised"
-                          color="secondary"
-                          className={classes.viewButton}>
-                          <ViewIcon />
-                        </IconButton>
-                      </Link>
-
-                      <Button
-                        aria-label="Follow"
-                        variant="raised"
-                        color="primary"
-                        onClick={this.handleFollowClick.bind(
-                          this,
-                          user,
-                          index
-                        )}>
-                        Follow
-                      </Button>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </span>
-              )
-            })}
+                          color="primary"
+                          onClick={this.handleFollowClick.bind(
+                            this,
+                            user,
+                            index
+                          )}>
+                          Follow
+                        </Button>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  </span>
+                )
+              })}
           </List>
         </Paper>
 
