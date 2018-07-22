@@ -68,7 +68,7 @@ const create = (req, res, next) => {
 }
 
 const postById = (req, res, next, id) => {
-  User.findById(id)
+  Post.findById(id)
     .populate('postedBy', '_id name')
     .exec((err, post) => {
       if (err || !post)
