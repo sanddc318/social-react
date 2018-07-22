@@ -51,7 +51,7 @@ class Post extends Component {
     comments: []
   }
 
-  deletePost = () => {
+  removePost = () => {
     const jwt = auth.isAuthenticated()
 
     remove({ postId: this.props.post._id }, { t: jwt.token }).then((data) => {
@@ -73,7 +73,7 @@ class Post extends Component {
           avatar={<Avatar src={`/api/users/photo/${postedBy._id}`} />}
           action={
             postedBy._id === auth.isAuthenticated().user._id && (
-              <IconButton onClick={this.deletePost}>
+              <IconButton onClick={this.removePost}>
                 <DeleteIcon />
               </IconButton>
             )

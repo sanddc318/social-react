@@ -7,7 +7,7 @@ import AppBar from 'material-ui/AppBar'
 import Typography from 'material-ui/Typography'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import FollowGrid from '../user/FollowGrid.jsx'
-// import PostList from '../post/PostList.jsx'
+import PostList from '../post/PostList.jsx'
 
 class ProfileTabs extends Component {
   state = {
@@ -40,10 +40,10 @@ class ProfileTabs extends Component {
 
         {this.state.tab === 0 && (
           <TabContainer>
-            {/*<PostList
-              removeUpdate={this.props.removePostUpdate}
+            <PostList
+              onRemovePost={this.props.onRemovePost}
               posts={this.props.posts}
-            />*/}
+            />
           </TabContainer>
         )}
 
@@ -65,7 +65,7 @@ class ProfileTabs extends Component {
 
 ProfileTabs.propTypes = {
   user: PropTypes.object.isRequired,
-  removePostUpdate: PropTypes.func.isRequired,
+  onRemovePost: PropTypes.func.isRequired,
   posts: PropTypes.array.isRequired
 }
 

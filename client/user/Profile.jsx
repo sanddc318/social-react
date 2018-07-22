@@ -17,7 +17,6 @@ import Divider from 'material-ui/Divider'
 import auth from '../auth/auth-helper'
 import DeleteUser from './DeleteUser.jsx'
 import FollowProfileButton from './FollowProfileButton.jsx'
-import FollowGrid from './FollowGrid.jsx'
 import ProfileTabs from './ProfileTabs.jsx'
 import { read } from './api-user'
 import { listByUser } from '../post/api-post'
@@ -64,7 +63,9 @@ class Profile extends Component {
         this.setState({ redirectToSignin: true })
       } else {
         let following = this.checkIfFollowing(data)
+
         this.setState({ user: data, following: following })
+        this.loadPosts(data._id)
       }
     })
   }
@@ -112,6 +113,14 @@ class Profile extends Component {
         this.setState({ posts: data })
       }
     })
+  }
+
+  handleRemovePost = (post) => {
+    const updatedPosts = this.state.posts
+    const index = updatedPosts.indexOf(post)
+
+    updatedPosts.splice(index, 1)
+    this.setState({ posts: updatedPosts })
   }
 
   render() {
@@ -175,7 +184,7 @@ class Profile extends Component {
           </ListItem>
         </List>
 
-        <ProfileTabs user={this.state.user} posts={this.state.posts} removePostUpdate={this.removePost} />
+        <ProfileTabs user={this.state.user} posts={this.state.posts} onRemovePost={this.handleRemovePost} />
       </Paper>
     )
   }
