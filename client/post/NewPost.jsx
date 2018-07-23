@@ -33,6 +33,10 @@ const styles = (theme) => ({
     paddingTop: 8,
     paddingBottom: 8
   },
+  cardActions: {
+    justifyContent: 'flex-end',
+    padding: 0
+  },
   photoButton: {
     height: 30,
     marginBottom: 5
@@ -46,7 +50,7 @@ const styles = (theme) => ({
     width: '90%'
   },
   submit: {
-    margin: theme.spacing.unit * 2
+    margin: '10px'
   },
   filename: {
     verticalAlign: 'super'
@@ -104,7 +108,7 @@ class NewPost extends Component {
             <TextField
               placeholder="Share your thoughts ..."
               multiline
-              rows="3"
+              rows="2"
               value={this.state.text}
               onChange={this.handleChange('text')}
               className={classes.textField}
@@ -140,7 +144,7 @@ class NewPost extends Component {
             )}
           </CardContent>
 
-          <CardActions>
+          <CardActions className={classes.cardActions}>
             <Button
               color="primary"
               variant="raised"

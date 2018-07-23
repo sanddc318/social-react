@@ -66,7 +66,7 @@ class Newsfeed extends Component {
     const { classes } = this.props
 
     return (
-      <Card>
+      <Card className={classes.card}>
         <Typography type="title" className={classes.title}>
           Newsfeed
         </Typography>

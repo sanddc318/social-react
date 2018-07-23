@@ -29,6 +29,10 @@ const styles = (theme) => ({
     paddingTop: theme.spacing.unit,
     paddingBottom: theme.spacing.unit
   },
+  cardActions: {
+    margin: 0,
+    padding: 0
+  },
   text: {
     margin: theme.spacing.unit * 2
   },
@@ -37,10 +41,11 @@ const styles = (theme) => ({
     padding: theme.spacing.unit
   },
   media: {
-    height: 200
+    height: 200,
+    padding: theme.spacing.unit
   },
   button: {
-    margin: theme.spacing.unit
+    margin: 0
   }
 })
 
@@ -90,6 +95,7 @@ class Post extends Component {
 
           {photo && (
             <div className={classes.photo}>
+              <Divider />
               <img
                 className={classes.media}
                 src={`/api/posts/photo/${_id}`}
@@ -99,7 +105,7 @@ class Post extends Component {
           )}
         </CardContent>
 
-        <CardActions>
+        <CardActions className={classes.cardActions}>
           {this.state.like ? (
             <IconButton
               className={classes.button}
