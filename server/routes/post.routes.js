@@ -22,6 +22,14 @@ router.route('/api/posts/photo/:postId')
   .get(postCtrl.photo)
 
 // prettier-ignore
+router.route('/api/posts/like')
+  .put(authCtrl.requireSignin, postCtrl.like)
+
+// prettier-ignore
+router.route('/api/posts/unlike')
+  .put(authCtrl.requireSignin, postCtrl.unlike)
+
+// prettier-ignore
 router.route('/api/posts/:postId')
   .delete(
     authCtrl.requireSignin,

@@ -56,6 +56,26 @@ class Post extends Component {
     comments: []
   }
 
+  componentDidMount() {
+    const { likes, comments } = this.props.post
+
+    this.setState({
+      like: this.checkLike(likes),
+      likes: likes.length,
+      comments: comments
+    })
+  }
+
+  componentWillReceiveProps(props) {
+    const { likes, comments } = props.post
+
+    this.setState({
+      like: this.checkLike(likes),
+      likes: likes.length,
+      comments: comments
+    })
+  }
+
   removePost = () => {
     const jwt = auth.isAuthenticated()
 
@@ -64,6 +84,31 @@ class Post extends Component {
         console.log(data.error)
       } else {
         this.props.onRemovePost(this.props.post)
+      }
+    })
+  }
+
+  checkLike = (likes) => {
+    console.log(likes)
+    const jwt = auth.isAuthenticated()
+    let userAlreadyLiked = likes.indexOf(jwt.user._id) !== -1
+
+    return userAlreadyLiked
+  }
+
+  like = () => {
+    let callApi = this.state.like ? unlike : like
+    const jwt = auth.isAuthenticated()
+
+    callApi(
+      { userId: jwt.user._id },
+      { t: jwt.token },
+      this.props.post._id
+    ).then((data) => {
+      if (data.error) {
+        console.log(data.error)
+      } else {
+        this.setState({ like: !this.state.like, likes: data.likes.length })
       }
     })
   }

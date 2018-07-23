@@ -72,6 +72,36 @@ const remove = (req, res, next) => {
   })
 }
 
+const like = (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    { $push: { likes: req.body.userId } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err)
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+
+    res.json(result)
+  })
+}
+
+const unlike = (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    { $pull: { likes: req.body.userId } },
+    { new: true }
+  ).exec((err, result) => {
+    if (err)
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+
+    res.json(result)
+  })
+}
+
 const listNewsfeed = (req, res) => {
   let following = req.profile.following
   following.push(req.profile._id)
@@ -117,6 +147,8 @@ export default {
   postById,
   isPoster,
   remove,
+  like,
+  unlike,
   listNewsfeed,
   listByUser,
   photo

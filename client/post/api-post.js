@@ -24,6 +24,34 @@ const remove = (params, credentials) => {
     .catch((err) => console.log(err))
 }
 
+const like = (params, credentials, postId) => {
+  return fetch(`/api/posts/like/`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${credentials.t}`
+    },
+    body: JSON.stringify({ userId: params.userId, postId: postId })
+  })
+    .then((response) => response.json())
+    .catch((err) => console.log(err))
+}
+
+const unlike = (params, credentials, postId) => {
+  return fetch(`/api/posts/unlike/`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${credentials.t}`
+    },
+    body: JSON.stringify({ userId: params.userId, postId: postId })
+  })
+    .then((response) => response.json())
+    .catch((err) => console.log(err))
+}
+
 const listNewsfeed = (params, credentials) => {
   return fetch(`/api/posts/feed/${params.userId}`, {
     headers: {
@@ -48,4 +76,4 @@ const listByUser = (params, credentials) => {
     .catch((err) => console.log(err))
 }
 
-export { create, remove, listNewsfeed, listByUser }
+export { create, remove, like, unlike, listNewsfeed, listByUser }
