@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField'
 import Avatar from 'material-ui/Avatar'
 import Icon from 'material-ui/Icon'
 import auth from './../auth/auth-helper'
-import { comment } from './api-post.js'
+import { comment, uncomment } from './api-post.js'
 
 const styles = (theme) => ({
   cardHeader: {
@@ -48,6 +48,7 @@ class Comments extends Component {
   }
 
   addComment = (event) => {
+    // Only when enter key is pressed.
     if (event.keyCode == 13 && event.target.value) {
       event.preventDefault()
 
@@ -70,6 +71,26 @@ class Comments extends Component {
     }
   }
 
+  deleteComment = (comment) => (event) => {
+    event.preventDefault()
+
+    const jwt = auth.isAuthenticated()
+
+    // prettier-ignore
+    uncomment(
+      {userId: jwt.user._id},
+      {t: jwt.token},
+      this.props.postId,
+      comment
+    ).then(data => {
+      if (data.error) {
+        console.log(data.error)
+      } else {
+        this.props.onUpdateComments(data.comments)
+      }
+    })
+  }
+
   render() {
     const { classes } = this.props
     const commentBody = (item) => (
@@ -84,8 +105,7 @@ class Comments extends Component {
           {auth.isAuthenticated().user._id === item.postedBy._id && (
             <Icon
               className={classes.commentDelete}
-              /*onClick={this.deleteComment(item)}*/
-            >
+              onClick={this.deleteComment(item)}>
               delete
             </Icon>
           )}

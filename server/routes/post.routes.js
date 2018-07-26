@@ -34,6 +34,10 @@ router.route('/api/posts/comment')
   .put(authCtrl.requireSignin, postCtrl.comment)
 
 // prettier-ignore
+router.route('/api/posts/uncomment')
+  .put(authCtrl.requireSignin, postCtrl.uncomment)
+
+// prettier-ignore
 router.route('/api/posts/:postId')
   .delete(
     authCtrl.requireSignin,
