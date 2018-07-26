@@ -30,6 +30,10 @@ router.route('/api/posts/unlike')
   .put(authCtrl.requireSignin, postCtrl.unlike)
 
 // prettier-ignore
+router.route('/api/posts/comment')
+  .put(authCtrl.requireSignin, postCtrl.comment)
+
+// prettier-ignore
 router.route('/api/posts/:postId')
   .delete(
     authCtrl.requireSignin,

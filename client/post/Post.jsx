@@ -11,6 +11,7 @@ import FavoriteIcon from 'material-ui-icons/Favorite'
 import FavoriteBorderIcon from 'material-ui-icons/FavoriteBorder'
 import CommentIcon from 'material-ui-icons/Comment'
 import Divider from 'material-ui/Divider'
+import Comments from './Comments.jsx'
 import auth from './../auth/auth-helper'
 import { remove, like, unlike } from './api-post.js'
 
@@ -89,7 +90,6 @@ class Post extends Component {
   }
 
   checkLike = (likes) => {
-    console.log(likes)
     const jwt = auth.isAuthenticated()
     let userAlreadyLiked = likes.indexOf(jwt.user._id) !== -1
 
@@ -111,6 +111,10 @@ class Post extends Component {
         this.setState({ like: !this.state.like, likes: data.likes.length })
       }
     })
+  }
+
+  handleUpdateComments = (comments) => {
+    this.setState({ comments: comments })
   }
 
   render() {
@@ -178,6 +182,13 @@ class Post extends Component {
           </IconButton>
           <span>{this.state.comments.length}</span>
         </CardActions>
+        <Divider />
+
+        <Comments
+          postId={_id}
+          comments={this.state.comments}
+          onUpdateComments={this.handleUpdateComments}
+        />
       </Card>
     )
   }
